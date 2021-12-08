@@ -14,6 +14,7 @@ let gameLevel = levels.find((level) => { //finds the selected level button in ht
 //event listener: change selected btwn easy and hard
 
 levels.forEach((level) =>{
+
     level.addEventListener("click", function(){
         levels.forEach(mode => mode.classList.remove("selected")); //removes from all the levels
         this.classList.add("selected");
@@ -45,4 +46,7 @@ startButton.addEventListener("click", function(){
 
     // firstSquare.style.backgroundColor = "rgb(200, 45, 255)";
     // console.log(firstSquare);
+});
+startButton.addEventListener("click", function change() {
+    document.getElementById("reset").innerHTML = "Reset Color";
 });
