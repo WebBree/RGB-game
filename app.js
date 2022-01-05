@@ -6,8 +6,6 @@ const colorDisplayElement = document.getElementById("color-display");
 
 // array 
 const levels = Array.from(document.getElementsByClassName("mode")); // find the class called mode
-const squares = Array.from(document.getElementsByClassName("square"));
-
 
 let selectedLevelButton = levels.find((level) => { //finds the selected level button in html
     const classList = Array.from(level.classList);
@@ -15,6 +13,8 @@ let selectedLevelButton = levels.find((level) => { //finds the selected level bu
 });
 
 let gameLevel = selectedLevelButton.innerHTML;
+
+let squares = getSquares();
 
 //event listener: change selected btwn easy and hard
 
@@ -24,10 +24,34 @@ levels.forEach((level) =>{
         this.classList.add("selected");
 
         gameLevel = this.innerHTML; // updates on which game level is chosen when running console
-
+        setTilesAccordingToLevel(gameLevel);
+        squares = getSquares();
     });
 
 });
+
+function getSquares(){
+    const allSquares = Array.from(document.getElementsByClassName("square"));
+
+    if(gameLevel === "Easy"){
+        return allSquares.slice(0, 3);
+    }else{
+        return allSquares;
+    }
+}
+
+function setTilesAccordingToLevel(currentGameLevel){
+    const allSquares = Array.from(document.getElementsByClassName("square"));
+    if (currentGameLevel === "Easy") {
+        const firstThreeSquares = allSquares.slice(0,3);
+        const lastThreeSquares = allSquares.slice(3,6);
+
+        lastThreeSquares.forEach(sq => sq.classList.add("hidden"));
+
+    }else if(currentGameLevel == "Hard"){
+        allSquares.forEach(sq => sq.classList.remove("hidden"));
+    }
+}
 
 const startButton = document.getElementById("reset");
 
@@ -48,7 +72,7 @@ startButton.addEventListener("click", function(){
 
     }
     // assign the header a random value
-    const randomSquareIndex = Math.floor(Math.random() * 6);
+    const randomSquareIndex = Math.floor(Math.random() * squares.length);
     const headerColorSquare = squares[randomSquareIndex];
     setHeaderRgbBackgroundColor(headerColorSquare);
 });
@@ -96,5 +120,6 @@ function setSquareBackgroundAfterWin(headerRgbString){
     squares.forEach((sq) => {
         sq.classList.remove("hidden");
         sq.style.backgroundColor = rgbString;
+        sq.dataset.rgb_value = colorDisplayElement.dataset.rgb_value;
     });
 }
